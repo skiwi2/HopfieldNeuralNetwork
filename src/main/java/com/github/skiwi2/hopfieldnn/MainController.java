@@ -52,7 +52,7 @@ public class MainController implements Initializable {
             }
         }
 
-        Label resolveLabel = new Label("Resolve");
+        Label resolveLabel = new Label("Recall");
         resolveLabel.setOnMouseClicked(mouseEvent -> setGridForPattern(0));
         patternHBox.getChildren().add(resolveLabel);
     }
@@ -85,7 +85,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void onResolveAction(final ActionEvent actionEvent) {
+    private void onRecallAction(final ActionEvent actionEvent) {
         //show animation on how it is solving things with the learned matrix
     }
 }
