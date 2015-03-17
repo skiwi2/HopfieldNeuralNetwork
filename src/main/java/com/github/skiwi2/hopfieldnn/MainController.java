@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
@@ -27,6 +28,9 @@ public class MainController implements Initializable {
 
     @FXML
     private HBox patternHBox;
+
+    @FXML
+    private TextField stepDelayTextField;
 
     public static final int GRID_COUNT = 10;
 
@@ -63,6 +67,8 @@ public class MainController implements Initializable {
         Label resolveLabel = new Label("Recall");
         resolveLabel.setOnMouseClicked(mouseEvent -> setGridForPatternNumber(0));
         patternHBox.getChildren().add(resolveLabel);
+
+        stepDelayTextField.setText("0");
     }
 
     @FXML
@@ -98,8 +104,14 @@ public class MainController implements Initializable {
 
     @FXML
     private void onRecallAction(final ActionEvent actionEvent) {
+        int stepDelay = Integer.parseInt(stepDelayTextField.getText());
         executorService.submit(() -> {
             neuralNetwork.recall(currentGrid.map(bool -> bool ? 1 : -1), intermediatePattern -> {
+                try {
+                    Thread.sleep(stepDelay);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
                 currentGrid = intermediatePattern.map(intValue -> (intValue == 1));
                 Platform.runLater(() -> setGridForPattern(currentGrid));
             });

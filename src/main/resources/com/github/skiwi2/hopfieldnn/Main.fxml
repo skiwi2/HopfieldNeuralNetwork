@@ -56,6 +56,8 @@
                <children>
                   <Button layoutX="94.0" layoutY="14.0" mnemonicParsing="false" onAction="#onRecallAction" text="Recall" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                   <Button layoutX="94.0" layoutY="14.0" mnemonicParsing="false" onAction="#onLearnAction" text="Learn" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                  <TextField fx:id="stepDelayTextField" layoutX="98.0" layoutY="406.0" prefWidth="50.0" AnchorPane.bottomAnchor="49.0" AnchorPane.rightAnchor="14.0" />
+                  <Label layoutY="410.0" text="Step delay (ms)" AnchorPane.bottomAnchor="53.0" AnchorPane.rightAnchor="78.0" />
                </children>
             </AnchorPane>
          </children>
