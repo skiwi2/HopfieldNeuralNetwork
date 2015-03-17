@@ -25,7 +25,7 @@ public class CellPane extends AnchorPane implements Initializable {
     }
 
     @Override
-    public void initialize(final URL location, final ResourceBundle resourceBundle) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         filledProperty.addListener((observableValue, oldValue, newValue) -> {
             if (newValue) {
                 setStyle("-fx-border-color: black; -fx-background-color: black");
@@ -37,8 +37,9 @@ public class CellPane extends AnchorPane implements Initializable {
         filledProperty.set(true);
         filledProperty.set(false);
         setOnMousePressed(mouseEvent -> filledProperty.set(!filledProperty.get()));
-        setOnMouseEntered(mouseEvent -> {
-            if (mouseEvent.isPrimaryButtonDown() || mouseEvent.isControlDown()) {
+        setOnDragDetected(mouseEvent -> startFullDrag());
+        setOnMouseDragEntered(mouseDragEvent -> {
+            if (mouseDragEvent.getGestureSource() != this) {
                 filledProperty.set(!filledProperty.get());
             }
         });
