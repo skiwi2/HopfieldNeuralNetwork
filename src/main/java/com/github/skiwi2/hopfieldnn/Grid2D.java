@@ -36,7 +36,7 @@ public class Grid2D<T> {
         data[row * width + column] = element;
     }
 
-    public void setWidth(final int index, final T element) {
+    public void set(final int index, final T element) {
         set(index / width, index % width, element);
     }
 

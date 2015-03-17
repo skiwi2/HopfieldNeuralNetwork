@@ -1,6 +1,7 @@
 package com.github.skiwi2.hopfieldnn;
 
 import com.github.skiwi2.hopfieldnn.neuralnetwork.NeuralNetwork;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +31,11 @@ public class MainController implements Initializable {
     public static final int GRID_COUNT = 10;
 
     private final NeuralNetwork neuralNetwork = new NeuralNetwork(GRID_COUNT * GRID_COUNT);
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable);
+        thread.setDaemon(true);
+        return thread;
+    });
 
     private final Grid2D<CellPane> gridCells = new Grid2D<>(GRID_COUNT, GRID_COUNT);
 
@@ -53,24 +61,28 @@ public class MainController implements Initializable {
         }
 
         Label resolveLabel = new Label("Recall");
-        resolveLabel.setOnMouseClicked(mouseEvent -> setGridForPattern(0));
+        resolveLabel.setOnMouseClicked(mouseEvent -> setGridForPatternNumber(0));
         patternHBox.getChildren().add(resolveLabel);
     }
 
     @FXML
     private void onAddPatternAction(final ActionEvent actionEvent) {
         Label label = new Label("Pattern " + patternCount);
-        label.setOnMouseClicked(mouseEvent -> setGridForPattern(Integer.parseInt(label.getText().replace("Pattern ", ""))));
+        label.setOnMouseClicked(mouseEvent -> setGridForPatternNumber(Integer.parseInt(label.getText().replace("Pattern ", ""))));
         currentGrid = new Grid2D<>(GRID_COUNT, GRID_COUNT);
         currentGrid.setAll(false);
         patternGrids.put(patternCount, currentGrid);
-        setGridForPattern(patternCount);
+        setGridForPatternNumber(patternCount);
         patternHBox.getChildren().add(label);
         patternCount++;
     }
 
-    private void setGridForPattern(final int patternNumber) {
-        currentGrid = patternGrids.get(patternNumber);
+    private void setGridForPatternNumber(final int patternNumber) {
+        setGridForPattern(patternGrids.get(patternNumber));
+    }
+
+    private void setGridForPattern(final Grid2D<Boolean> pattern) {
+        currentGrid = pattern;
         gridCells.forEach(cellPane -> cellPane.setGrid(currentGrid));
     }
 
@@ -86,6 +98,11 @@ public class MainController implements Initializable {
 
     @FXML
     private void onRecallAction(final ActionEvent actionEvent) {
-        //show animation on how it is solving things with the learned matrix
+        executorService.submit(() -> {
+            neuralNetwork.recall(currentGrid.map(bool -> bool ? 1 : -1), intermediatePattern -> {
+                currentGrid = intermediatePattern.map(intValue -> (intValue == 1));
+                Platform.runLater(() -> setGridForPattern(currentGrid));
+            });
+        });
     }
 }
