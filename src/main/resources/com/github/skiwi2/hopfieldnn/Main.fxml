@@ -52,6 +52,12 @@
                   <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                </GridPane.margin>
             </GridPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Button layoutX="94.0" layoutY="14.0" mnemonicParsing="false" onAction="#onResolveAction" text="Resolve" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                  <Button layoutX="94.0" layoutY="14.0" mnemonicParsing="false" onAction="#onLearnAction" text="Learn" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+               </children>
+            </AnchorPane>
          </children>
       </GridPane>
       <GridPane>
@@ -65,7 +71,7 @@
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <Button layoutX="66.0" layoutY="14.0" mnemonicParsing="false" onAction="#onAddPatternAction" text="Add pattern" />
+                  <Button layoutX="66.0" layoutY="14.0" mnemonicParsing="false" onAction="#onAddPatternAction" text="Add pattern" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
             <HBox fx:id="patternHBox" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
